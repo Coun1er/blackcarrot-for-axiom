@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BlackCarrot for Axiom — Checker</title>
+    <link rel="stylesheet" href="checker.css" />
+  </head>
+  <body>
+    <div class="page">
+
+      <header class="ck-header">
+        <div class="ck-title">
+          <span class="ck-logo">⚡</span>
+          <span>Checker</span>
+        </div>
+        <a id="openTab" class="ck-link" href="#" title="Open in a full tab">⤢</a>
+      </header>
+
+      <form id="lookupForm" class="ck-lookup" autocomplete="off">
+        <input id="addr" type="text" spellcheck="false"
+               placeholder="token address" aria-label="Token address" />
+        <button id="check" type="submit" class="ck-btn">Check</button>
+      </form>
+
+      <div id="msg" class="ck-msg" hidden></div>
+      <div id="result" hidden></div>
+
+    </div>
+    <script src="server-config.js"></script>
+    <script src="checker.js"></script>
+  </body>
+</html>

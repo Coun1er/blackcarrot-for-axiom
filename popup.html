@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BlackCarrot for Axiom</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">⚡</div>
+        <div class="brand-text">
+          <div class="brand-name">BlackCarrot for Axiom</div>
+          <div class="brand-sub">meme · smart · feed</div>
+        </div>
+      </div>
+      <span id="status" class="status disconnected">Disconnected</span>
+    </header>
+
+    <section class="connect">
+      <input id="serverAddress" type="text" placeholder="Server address (IP or https://host)"
+             aria-label="Server address" autocomplete="off" spellcheck="false" />
+      <div id="connectionError" role="alert" hidden></div>
+      <input id="wsToken" type="password" placeholder="Access key"
+             autocomplete="off" spellcheck="false" />
+      <div class="connect-actions">
+        <button id="connect" class="btn btn-primary">Connect</button>
+        <button id="disconnect" class="btn btn-ghost">Disconnect</button>
+        <button id="openChecker" class="btn btn-ghost" title="Open the token checker">Checker</button>
+      </div>
+    </section>
+
+    <main class="settings">
+
+      <!-- ── Whitelists ───────────────────────────────────────── -->
+      <section class="group">
+        <div class="group-head">
+          <h2>Whitelists</h2>
+          <span id="wlCounts" class="group-meta">0 · 0</span>
+        </div>
+        <div class="field">
+          <label for="devWlTextarea">Dev — one address per line</label>
+          <textarea id="devWlTextarea" rows="4" spellcheck="false"
+            placeholder="CAsJeUjgQohPYC4t5UWCELhfSjvMVrKo4itZ7DA74rTQ"></textarea>
+        </div>
+        <div class="field">
+          <label for="twitterWlTextarea">Twitter — one handle per line, no @</label>
+          <textarea id="twitterWlTextarea" rows="4" spellcheck="false"
+            placeholder="somehandle"></textarea>
+        </div>
+      </section>
+
+      <!-- ── Alerts ───────────────────────────────────────────── -->
+      <section class="group">
+        <div class="group-head"><h2>WL match sounds</h2></div>
+
+        <div class="row" data-sound="soundDevOnly">
+          <div class="row-text">
+            <div class="row-name">Dev WL match</div>
+          </div>
+          <div class="row-control">
+            <select id="soundDevOnlyName" class="mini"></select>
+            <button type="button" class="btn-icon" data-play="soundDevOnlyName" title="Preview">▶</button>
+            <input type="checkbox" id="soundDevOnlyEnabled" class="switch" />
+          </div>
+        </div>
+
+        <div class="row" data-sound="soundTwitterOnly">
+          <div class="row-text">
+            <div class="row-name">Twitter WL match</div>
+          </div>
+          <div class="row-control">
+            <select id="soundTwitterOnlyName" class="mini"></select>
+            <button type="button" class="btn-icon" data-play="soundTwitterOnlyName" title="Preview">▶</button>
+            <input type="checkbox" id="soundTwitterOnlyEnabled" class="switch" />
+          </div>
+        </div>
+
+        <div class="row" data-sound="soundBoth">
+          <div class="row-text">
+            <div class="row-name">Dev + Twitter</div>
+          </div>
+          <div class="row-control">
+            <select id="soundBothName" class="mini"></select>
+            <button type="button" class="btn-icon" data-play="soundBothName" title="Preview">▶</button>
+            <input type="checkbox" id="soundBothEnabled" class="switch" />
+          </div>
+        </div>
+      </section>
+
+      <!-- ── KPrediction actions ──────────────────────────────────── -->
+      <section class="group auto-buy-group">
+        <div class="group-head"><h2>K prediction · Open token</h2></div>
+
+        <div class="row">
+          <div class="row-text">
+            <div class="row-name">Open matching token</div>
+            <div class="row-hint">opens the token page without a trusted buy click</div>
+          </div>
+          <input type="checkbox" id="kPredictionAutoOpenEnabled" class="switch" />
+        </div>
+
+        <div class="row">
+          <div class="row-text"><div class="row-name">Trigger mode</div></div>
+          <select id="kPredictionAutoOpenTriggerMode" class="mini condition-select">
+            <option value="percent">Minimum percentage</option>
+            <option value="status">Minimum status</option>
+          </select>
+        </div>
+
+        <div class="row" data-condition-percent="open">
+          <div class="row-text">
+            <div class="row-name">Minimum rating to open</div>
+            <div class="row-hint">K prediction · percent</div>
+          </div>
+          <div class="row-control percent-control">
+            <input id="kPredictionAutoOpenThresholdPercent" type="number" min="0" max="100" step="0.01" class="mini num" />
+            <span>%</span>
+          </div>
+        </div>
+
+        <div class="row" data-condition-status="open">
+          <div class="row-text">
+            <div class="row-name">Minimum status to open</div>
+            <div class="row-hint">opens for this status and every higher status</div>
+          </div>
+          <select id="kPredictionAutoOpenDecision" class="mini condition-select">
+            <option value="BUY_CANDIDATE">BUY_CANDIDATE</option>
+            <option value="WATCH">WATCH</option>
+            <option value="SKIP">SKIP</option>
+          </select>
+        </div>
+
+      </section>
+
+      <section class="group auto-buy-group">
+        <div class="group-head"><h2>K prediction · Auto-buy</h2></div>
+
+        <div class="row">
+          <div class="row-text">
+            <div class="row-name">Auto-buy live predictions</div>
+            <div class="row-hint">uses the current Axiom Quick Buy amount</div>
+          </div>
+          <input type="checkbox" id="kPredictionAutoBuyEnabled" class="switch" />
+        </div>
+
+        <div class="row">
+          <div class="row-text"><div class="row-name">Trigger mode</div></div>
+          <select id="kPredictionAutoBuyTriggerMode" class="mini condition-select">
+            <option value="percent">Minimum percentage</option>
+            <option value="status">Minimum status</option>
+          </select>
+        </div>
+
+        <div class="row" data-condition-percent="buy">
+          <div class="row-text">
+            <div class="row-name">Minimum rating to buy</div>
+            <div class="row-hint">K prediction · percent</div>
+          </div>
+          <div class="row-control percent-control">
+            <input id="kPredictionAutoBuyThresholdPercent" type="number" min="0" max="100" step="0.01" class="mini num" />
+            <span>%</span>
+          </div>
+        </div>
+
+        <div class="row" data-condition-status="buy">
+          <div class="row-text">
+            <div class="row-name">Minimum status to buy</div>
+            <div class="row-hint">buys for this status and every higher status</div>
+          </div>
+          <select id="kPredictionAutoBuyDecision" class="mini condition-select">
+            <option value="BUY_CANDIDATE">BUY_CANDIDATE</option>
+            <option value="WATCH">WATCH</option>
+            <option value="SKIP">SKIP</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <div class="row-text">
+            <div class="row-name">Speak rating after buy</div>
+            <div class="row-hint">announces only the K prediction percentage</div>
+          </div>
+          <input type="checkbox" id="kPredictionBuySpeechEnabled" class="switch" />
+        </div>
+
+      </section>
+
+      <section class="group">
+        <div class="group-head"><h2>K prediction · Voice checker</h2></div>
+
+        <div class="row">
+          <div class="row-text">
+            <div class="row-name">Voice checker</div>
+            <div class="row-hint">announces token name and rating once</div>
+          </div>
+          <input type="checkbox" id="kPredictionRatingCheckerEnabled" class="switch" />
+        </div>
+
+        <div class="row">
+          <div class="row-text"><div class="row-name">Trigger mode</div></div>
+          <select id="kPredictionRatingCheckerTriggerMode" class="mini condition-select">
+            <option value="percent">Minimum percentage</option>
+            <option value="status">Minimum status</option>
+          </select>
+        </div>
+
+        <div class="row" data-condition-percent="voice">
+          <div class="row-text">
+            <div class="row-name">Minimum rating to announce</div>
+            <div class="row-hint">K prediction · percent</div>
+          </div>
+          <div class="row-control percent-control">
+            <input id="kPredictionRatingCheckerThresholdPercent" type="number" min="0" max="100" step="0.01" class="mini num" />
+            <span>%</span>
+          </div>
+        </div>
+
+        <div class="row" data-condition-status="voice">
+          <div class="row-text">
+            <div class="row-name">Minimum status to announce</div>
+            <div class="row-hint">announces this status and every higher status</div>
+          </div>
+          <select id="kPredictionRatingCheckerDecision" class="mini condition-select">
+            <option value="BUY_CANDIDATE">BUY_CANDIDATE</option>
+            <option value="WATCH">WATCH</option>
+            <option value="SKIP">SKIP</option>
+          </select>
+        </div>
+
+      </section>
+
+      <!-- ── Row highlighting ─────────────────────────────────── -->
+      <section class="group">
+        <div class="group-head"><h2>Position / reuse</h2></div>
+
+        <div class="row">
+          <div class="row-text">
+            <div class="row-name">Position / reuse</div>
+            <div class="row-hint">highlight at or below</div>
+          </div>
+          <div class="row-control">
+            <input id="positionThreshold" type="number" min="0" step="1" class="mini num" />
+            <input id="reuseThreshold" type="number" min="0" step="1" class="mini num" />
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ── Dev figures ──────────────────────────────────────── -->
+      <section class="group">
+        <div class="group-head"><h2>Previous-token fees</h2></div>
+
+        <div class="row">
+          <div class="row-text">
+            <div class="row-name">Show in Quick Buy</div>
+            <div class="row-hint">display previous-token fees inside the button</div>
+          </div>
+          <input type="checkbox" id="quickBuyFeesEnabled" class="switch" />
+        </div>
+
+        <div class="row">
+          <div class="row-text">
+            <div class="row-name">Fees shown</div>
+            <div class="row-hint">previous tokens</div>
+          </div>
+          <input id="feeTokenCount" type="number" min="1" max="10" step="1" class="mini num" />
+        </div>
+
+        <div class="row">
+          <div class="row-text">
+            <div class="row-name">Fee highlight</div>
+            <div class="row-hint">at or above</div>
+          </div>
+          <div class="row-control">
+            <input id="feeHighlightThreshold" type="number" min="0" step="0.1" class="mini num" />
+            <input type="color" id="feeHighlightColor" class="swatch-input" />
+          </div>
+        </div>
+
+      </section>
+
+      <section class="group">
+        <div class="group-head"><h2>Data display</h2></div>
+
+        <div class="row">
+          <div class="row-text"><div class="row-name">Dev volume</div></div>
+          <input type="checkbox" id="showDevVolume" class="switch" />
+        </div>
+
+        <div class="row">
+          <div class="row-text">
+            <div class="row-name">Dev previous launch</div>
+            <div class="row-hint">time since the previous token</div>
+          </div>
+          <input type="checkbox" id="showDevPreviousLaunch" class="switch" />
+        </div>
+
+        <div class="row">
+          <div class="row-text"><div class="row-name">Twitter volume</div></div>
+          <input type="checkbox" id="showTwitterVolume" class="switch" />
+        </div>
+
+        <div class="row">
+          <div class="row-text">
+            <div class="row-name">Twitter previous launch</div>
+            <div class="row-hint">time since the previous publication</div>
+          </div>
+          <input type="checkbox" id="showTwitterPreviousLaunch" class="switch" />
+        </div>
+
+        <div class="row">
+          <div class="row-text">
+            <div class="row-name">Update B delay</div>
+            <div class="row-hint">time from token launch to update_b</div>
+          </div>
+          <input type="checkbox" id="showUpdateBDelay" class="switch" />
+        </div>
+      </section>
+
+      <section class="group">
+        <div class="group-head"><h2>Volume badges</h2></div>
+        <div class="row">
+          <div class="row-text">
+            <div class="row-name">Dev volume · ★</div>
+            <div class="row-hint">minimum USD volume · 0 disables</div>
+          </div>
+          <div class="row-control">
+            <input id="devVolBadgeThreshold" aria-label="Dev badge minimum USD volume" type="number" min="0" step="1000" class="mini num wide" />
+            <input id="devVolBadgeColor" aria-label="Dev badge color" type="color" class="swatch-input" />
+            <input type="checkbox" id="showDevVolBadge" class="switch" aria-label="Show dev volume star" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="row-text">
+            <div class="row-name">Twitter volume · ★</div>
+            <div class="row-hint">minimum USD volume · 0 disables</div>
+          </div>
+          <div class="row-control">
+            <input id="twitterVolBadgeThreshold" aria-label="Twitter badge minimum USD volume" type="number" min="0" step="1000" class="mini num wide" />
+            <input id="twitterVolBadgeColor" aria-label="Twitter badge color" type="color" class="swatch-input" />
+            <input type="checkbox" id="showTwitterVolBadge" class="switch" aria-label="Show twitter volume star" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="row-text">
+            <div class="row-name">Trust qualified · ★</div>
+            <div class="row-hint">Trusted dev + Twitter pairs</div>
+          </div>
+          <input type="checkbox" id="showTrustBadge" class="switch" aria-label="Show trust qualified badge" />
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <button id="save" class="btn btn-save">Save settings</button>
+    </footer>
+
+    <script src="server-config.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

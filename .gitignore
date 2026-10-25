@@ -1,0 +1,7 @@
+axiom/
+.DS_Store
+
+# Local development files (not part of the published extension)
+node_modules/
+tests/
+.claude/

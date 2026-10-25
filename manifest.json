@@ -1,0 +1,56 @@
+{
+  "manifest_version": 3,
+  "name": "BlackCarrot for Axiom",
+  "version": "0.2.69",
+  "description": "Adds Black Carrot data and tools to axiom.trade for paid Meme Smart Feed users (https://t.me/blackcarrot1).",
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "storage",
+    "tabs",
+    "debugger",
+    "offscreen",
+    "sidePanel",
+    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess"
+  ],
+  "side_panel": {
+    "default_path": "checker.html"
+  },
+  "host_permissions": [
+    "https://*.axiom.trade/*",
+    "http://127.0.0.1:8011/*",
+    "http://localhost:8011/*"
+  ],
+  "action": {
+    "default_title": "BlackCarrot for Axiom",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.axiom.trade/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "injected.js"
+      ],
+      "matches": [
+        "https://*.axiom.trade/*"
+      ]
+    }
+  ],
+  "optional_host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ]
+}

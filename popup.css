@@ -1,0 +1,361 @@
+/* ── Reset ───────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* Chrome sizes a popup from html/body, not from anything nested inside, so the
+   width has to be declared here. 390px is what makes a 44-character base58
+   address fit one line in the whitelist boxes. The fixed height lets the
+   connect bar and the save button stay pinned while the settings scroll. */
+html, body {
+  width: 390px;
+  height: 580px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #d4d4d8;
+  background: #0a0a0b;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Top bar ─────────────────────────────────────────────────── */
+.topbar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px 10px;
+}
+.brand { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  border-radius: 9px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.11), rgba(255,255,255,0.04));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 14px;
+}
+.brand-name {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #fafafa;
+}
+.brand-sub {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #52525b;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+.status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.status.disconnected { color: #71717a; border-color: rgba(113,113,122,0.3); background: rgba(113,113,122,0.1); }
+.status.connecting   { color: #f59e0b; border-color: rgba(245,158,11,0.35); background: rgba(245,158,11,0.1); }
+.status.connected    { color: #22c55e; border-color: rgba(34,197,94,0.4);  background: rgba(34,197,94,0.12); }
+.status.error        { color: #ef4444; border-color: rgba(239,68,68,0.4);  background: rgba(239,68,68,0.12); }
+
+/* ── Connect ─────────────────────────────────────────────────── */
+.connect {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 14px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.connect-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 6px;
+}
+
+/* ── Scrolling settings ──────────────────────────────────────── */
+.settings {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 12px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.settings::-webkit-scrollbar { width: 8px; }
+.settings::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 99px;
+  border: 2px solid #0a0a0b;
+}
+.settings::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.18); }
+
+.group { display: flex; flex-direction: column; gap: 7px; }
+.group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 1px;
+}
+.group-head h2 {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #52525b;
+}
+.group-meta { font-size: 10px; font-weight: 600; color: #3f3f46; }
+.group-actions { display: flex; gap: 4px; }
+
+/* ── Setting row ─────────────────────────────────────────────── */
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 11px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.row-text { min-width: 0; }
+.row-name { font-size: 12px; font-weight: 600; color: #e4e4e7; }
+.row-hint { font-size: 10px; color: #52525b; }
+.row-control { display: flex; align-items: center; gap: 6px; flex: 0 0 auto; }
+.row[hidden] { display: none !important; }
+.condition-select { min-width: 126px; }
+.percent-control { color: #71717a; font-size: 11px; font-weight: 700; }
+.auto-buy-group .row {
+  border-color: rgba(245, 158, 11, 0.13);
+}
+.auto-buy-warning {
+  padding: 7px 9px;
+  border-radius: 8px;
+  color: #a1a1aa;
+  background: rgba(245, 158, 11, 0.07);
+  border: 1px solid rgba(245, 158, 11, 0.14);
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+/* ── Fields ──────────────────────────────────────────────────── */
+.field { display: flex; flex-direction: column; gap: 5px; }
+label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #71717a;
+}
+
+input[type="password"],
+input[type="number"],
+input[type="text"],
+select,
+textarea {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #e4e4e7;
+  font: inherit;
+  font-size: 12px;
+  outline: none;
+  transition: border-color 150ms, background 150ms;
+  -webkit-appearance: none;
+  appearance: none;
+}
+input[type="password"],
+.connect input[type="text"] {
+  width: 100%;
+  min-height: 36px;
+  padding: 8px 11px;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.05);
+}
+input::placeholder, textarea::placeholder { color: #52525b; }
+
+.mini { padding: 5px 8px; font-size: 12px; }
+.num { width: 58px; text-align: center; font-variant-numeric: tabular-nums; }
+.num.wide { width: 82px; }
+select.mini {
+  padding-right: 22px;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%2371717a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 7px center;
+}
+select option { background: #141416; color: #e4e4e7; }
+
+textarea {
+  width: 100%;
+  padding: 8px 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  line-height: 1.55;
+  resize: vertical;
+  /* One entry per line, always — a wrapped address reads as two entries. */
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* ── Colour picker ───────────────────────────────────────────── */
+/* A real colour input, so any colour is reachable rather than a fixed list. */
+.swatch-input {
+  width: 28px;
+  height: 26px;
+  flex: 0 0 auto;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  cursor: pointer;
+}
+.swatch-input::-webkit-color-swatch-wrapper { padding: 0; }
+.swatch-input::-webkit-color-swatch {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 8px;
+}
+.swatch-input:hover::-webkit-color-swatch { border-color: rgba(255, 255, 255, 0.5); }
+
+/* ── Switch ──────────────────────────────────────────────────── */
+/* Drawn by hand: the appearance reset above strips native rendering, and with
+   it any effect of accent-color, so on and off would look identical. */
+.switch {
+  /* Required: without it the native checkbox renders on top of these styles.
+     It also disables accent-color, which is why the knob is drawn below. */
+  -webkit-appearance: none;
+  appearance: none;
+  position: relative;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  transition: background 160ms, border-color 160ms;
+}
+.switch::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  margin-top: -7px;
+  border-radius: 50%;
+  background: #71717a;
+  transition: transform 160ms, background 160ms;
+}
+.switch:hover { border-color: rgba(255, 255, 255, 0.22); }
+.switch:checked { background: rgba(34, 197, 94, 0.28); border-color: rgba(34, 197, 94, 0.55); }
+.switch:checked::before { transform: translateX(14px); background: #22c55e; }
+.switch:focus-visible { outline: 2px solid rgba(34, 197, 94, 0.5); outline-offset: 2px; }
+
+/* ── Buttons ─────────────────────────────────────────────────── */
+.btn {
+  padding: 8px 12px;
+  border-radius: 9px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 150ms, border-color 150ms, color 150ms;
+}
+.btn-primary {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fafafa;
+}
+.btn-primary:hover { background: rgba(255, 255, 255, 0.17); }
+.btn-ghost {
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: transparent;
+  color: #a1a1aa;
+}
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.06); color: #e4e4e7; }
+
+.btn-icon {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #a1a1aa;
+  font: inherit;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 150ms, color 150ms;
+}
+.btn-icon:hover { background: rgba(255, 255, 255, 0.11); color: #fafafa; }
+
+/* ── Score ranges ────────────────────────────────────────────── */
+.ranges { display: flex; flex-direction: column; gap: 6px; }
+.range {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 9px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.range .num { width: 54px; }
+.range-sep { color: #3f3f46; font-size: 11px; }
+.range-spacer { flex: 1 1 auto; }
+.range-empty { font-size: 11px; color: #52525b; font-style: italic; padding: 2px 2px 4px; }
+
+/* ── Footer ──────────────────────────────────────────────────── */
+.footer {
+  flex: 0 0 auto;
+  padding: 10px 14px 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: #0a0a0b;
+}
+.btn-save {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.09);
+  color: #fafafa;
+  font-size: 13px;
+  font-weight: 700;
+}
+.btn-save:hover { background: rgba(255, 255, 255, 0.16); }
+.btn-save:active { background: rgba(255, 255, 255, 0.2); }
+.btn-save.ok {
+  border-color: rgba(34, 197, 94, 0.5);
+  background: rgba(34, 197, 94, 0.16);
+  color: #4ade80;
+}

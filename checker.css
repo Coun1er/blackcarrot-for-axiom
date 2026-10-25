@@ -1,0 +1,279 @@
+/* Standalone rather than sharing popup.css: that file pins html/body to 390px
+   so the popup window sizes correctly, which is exactly wrong here — the side
+   panel is user-resizable and the same page also opens as a full tab. */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #d4d4d8;
+  background: #0a0a0b;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: 720px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Header ──────────────────────────────────────────────────── */
+.ck-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ck-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.ck-logo {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 12px;
+}
+.ck-link {
+  color: #52525b;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+.ck-link:hover { color: #a1a1aa; background: rgba(255, 255, 255, 0.06); }
+
+/* ── Lookup ──────────────────────────────────────────────────── */
+.ck-lookup {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px;
+}
+#addr {
+  min-width: 0;
+  padding: 7px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #e4e4e7;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  outline: none;
+  transition: border-color 150ms;
+}
+#addr:focus { border-color: rgba(255, 255, 255, 0.35); }
+#addr::placeholder { color: #52525b; font-family: inherit; }
+
+.ck-btn {
+  padding: 7px 12px;
+  border-radius: 9px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 150ms, border-color 150ms;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.09);
+  color: #fafafa;
+}
+.ck-btn:hover { background: rgba(255, 255, 255, 0.15); }
+.ck-btn:disabled { opacity: 0.5; cursor: default; }
+
+/* ── Messages ────────────────────────────────────────────────── */
+.ck-msg {
+  padding: 9px 11px;
+  border-radius: 9px;
+  font-size: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: #a1a1aa;
+}
+.ck-msg.err {
+  border-color: rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.08);
+  color: #fca5a5;
+}
+
+/* ── Card ────────────────────────────────────────────────────── */
+.ck-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ck-panel {
+  padding: 11px 12px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ck-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.ck-panel-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #52525b;
+}
+
+.ck-token-name { font-size: 15px; font-weight: 700; color: #fafafa; }
+.ck-token-ticker { font-size: 12px; font-weight: 600; color: #71717a; }
+.ck-volume-badges { display: inline-flex; align-items: center; gap: 4px; flex: none; }
+.ck-combined-star {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 23px;
+  height: 23px;
+  border: 1px solid;
+  border-radius: 7px;
+  background: rgba(168, 85, 247, 0.12);
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 800;
+}
+
+
+.ck-addr {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  color: #a1a1aa;
+  word-break: break-all;
+  cursor: pointer;
+}
+.ck-addr:hover { color: #e4e4e7; }
+
+/* Metric chips */
+.ck-metrics { display: flex; flex-wrap: wrap; gap: 6px; }
+.ck-metric {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  white-space: nowrap;
+}
+.ck-metric .k { font-size: 10px; font-weight: 600; color: #52525b; text-transform: uppercase; letter-spacing: 0.04em; }
+.ck-metric .v { font-size: 12px; font-weight: 700; color: #e4e4e7; }
+.ck-metric .v.dim { color: #71717a; }
+.ck-metric .v.good { color: #4ade80; }
+.ck-metric .v.warn { color: #f59e0b; }
+
+/* Whitelist toggle */
+.ck-wl {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: #a1a1aa;
+  transition: background 140ms, border-color 140ms, color 140ms;
+}
+.ck-wl:hover { background: rgba(255, 255, 255, 0.1); color: #e4e4e7; }
+.ck-wl.on {
+  border-color: rgba(34, 197, 94, 0.5);
+  background: rgba(34, 197, 94, 0.14);
+  color: #4ade80;
+}
+.ck-wl.on:hover {
+  border-color: rgba(239, 68, 68, 0.5);
+  background: rgba(239, 68, 68, 0.12);
+  color: #fca5a5;
+}
+.ck-wl[disabled] { opacity: 0.4; cursor: default; }
+
+/* Twitter handle history */
+.ck-handle-history { display: flex; flex-direction: column; gap: 3px; }
+.ck-history-label {
+  margin-top: 2px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #52525b;
+}
+.ck-history-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 4px 7px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.02);
+  font-size: 11px;
+}
+.ck-history-handle {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #71717a;
+  text-decoration: none;
+  font-weight: 600;
+}
+.ck-history-handle:hover { color: #a1a1aa; }
+.ck-history-age {
+  flex: 0 0 auto;
+  color: #71717a;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Previous tokens */
+.ck-table { display: flex; flex-direction: column; gap: 3px; }
+.ck-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto auto auto;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 7px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.02);
+  font-size: 11px;
+}
+.ck-row .name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #d4d4d8;
+  font-weight: 600;
+}
+.ck-row .ath {
+  color: #71717a;
+  font-size: 10px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.ck-row .fee { font-weight: 700; color: #e4e4e7; font-variant-numeric: tabular-nums; }
+.ck-row .fee.hi { color: #f59e0b; }
+.ck-row .mig { font-size: 10px; font-weight: 700; }
+.ck-row .mig.yes { color: #4ade80; }
+.ck-row .mig.no { color: #3f3f46; }
+.ck-row .ago { color: #52525b; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ck-empty { font-size: 11px; color: #52525b; font-style: italic; }
